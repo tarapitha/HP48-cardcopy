@@ -10,18 +10,18 @@ It takes two reals from the stack, level 2 specifies source and level 1 destinat
 1: 1  
 CARDCOPY  
 
-will copy the 128kB memory bank from port 5 to port 1.   
+will copy the memory bank from port 5 to port 1.   
 
 2: 1  
 1: 7  
 CARDCOPY  
 
-will copy the whole 128kB memory bank from port 1 to port 7.
+will copy the whole memory bank from port 1 to port 7.
 
-**Be aware -> All the data on the destination port will be overwritten with the source image.**
+**Be aware -> All the data on the destination port will be overwritten with the source memory port image.**
 
 # Requirements
 - Only HP48GX is supported
 - The utility should be run from the System RAM area.  
 - All sizes of memory cards are supported, but having 32kB card in one port mandates 32kB card in another port or the copy will not be done.
-- The utility only handles copying, nothing else. If you had libraries on the copied port, thenremove one of the cards ASAP after copying, to avoid problems due to having same libraries on more than one port.
+- The utility only handles copying, not resolving the possible system conflicts due to having the same libraries on multiple cards or overwriting the card with attatched libraries.
