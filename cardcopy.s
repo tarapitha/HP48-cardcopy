@@ -72,7 +72,7 @@ RPL
 	?A=C	P
 	GOYES	++
 
-	GOTO	PortErr
+	GONC	PortErr
 
 +	?ABIT=0	Readable	Must at least be present, not merged
 	GOYES	PortErr
@@ -89,7 +89,7 @@ RPL
 	?A#0	P		Must at least be present
 	GOYES	++
 
-	GOTO	PortErr
+	GONC	PortErr
 
 +	LCHEX	C		(RWS0) #C=1100, writable, not merged
 	?A#C	P
@@ -97,14 +97,12 @@ RPL
 ++
 **** Check if cards are equal size
 	D0=D0-	1
-	A=DAT0	P
+	A=DAT0	P		Size code in A.0
 	D0=D0+	2
 	C=DAT0	P
 
 	?A#C	P
 	GOYES	PortErr
-
-	D=C	P		Store size code in D.0
 
 **** Is port number less or equal to number of available banks?
 	D0=D0+	1
@@ -118,14 +116,14 @@ PortErr C=0	A
 +
 **** Calculate card size 32kB/128kB
 	LCHEX	1
-	?D#C	P
+	?A#C	P
 	GOYES	+
 
 	LCHEX	F0000		Size = 32kB ( #10000 nibbles negated )
-	GOTO	++
+	GONC	++
 
 +	LCHEX	2
-	?D#C	P
+	?A#C	P
 	GOYES	PortErr
 
 	LCHEX	C0000		Size = 128kB ( #40000 nibbles negated )
@@ -137,17 +135,18 @@ PortErr C=0	A
 	GOSBVL	=BankSelect
 
 **** Configure slot 1 to the address #40000
-	LCHEX	C0000
+	C=0	A
+	P=	4
+	LCHEX	C
 	UNCNFG			unconfig card in slot 1 (CE2) 
 	C=D	A		Size mask in D.A
 	CONFIG			Set slot 1 size
-	LCHEX	40000
+	LCHEX	4
 	CONFIG			Configure slot 1 at address 40000
 
 **** Copy the slot content
-	LCHEX	40000
 	A=C	A
-	LCHEX	C0000
+	LCHEX	C
 
 	?ST=1	Slot1to2
 	GOYES	+
