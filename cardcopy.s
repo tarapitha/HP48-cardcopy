@@ -40,7 +40,6 @@ RPL
 	GOSBVL	=POP2#		A(A) = Port_from# C.A = Port_to#
 	RSTK=C
 	GOSBVL	=SAVPTR
-	GOSBVL	=DisableIntr
 
 **** Get the bank number and copying direction
 	A=A-1	A
@@ -114,33 +113,37 @@ PortErr C=0	A
 	LCHEX	A		"Port Not Available"
 	GOVLNG	=GPErrjmpC
 +
-**** Calculate card size 32kB/128kB
+**** Calculate card size 32kB or 128kB
 	LCHEX	1
 	?A#C	P
 	GOYES	+
 
-	LCHEX	F0000		Size = 32kB ( #10000 nibbles negated )
+	LCHEX	F0000		Size = 32kB ( #10000 nibbles, negated )
 	GONC	++
 
 +	LCHEX	2
 	?A#C	P
 	GOYES	PortErr
 
-	LCHEX	C0000		Size = 128kB ( #40000 nibbles negated )
+	LCHEX	C0000		Size = 128kB ( #40000 nibbles, negated )
 
-++	D=C	A		Card size field for config
+++	D=C	A		D.A = card size field for config
+
+**** No interrupts while port 1 is misplaced
+	GOSBVL	=DisableIntr
+
+**** Unconfigure slot 1 from the usual location
+	LCHEX	C0000
+	UNCNFG
 
 **** Select slot 2 memory bank
 	C=B	B
 	GOSBVL	=BankSelect
 
 **** Configure slot 1 to the address #40000
-	C=0	A
-	P=	4
-	LCHEX	C
-	UNCNFG			unconfig card in slot 1 (CE2) 
 	C=D	A		Size mask in D.A
 	CONFIG			Set slot 1 size
+	P=	4
 	LCHEX	4
 	CONFIG			Configure slot 1 at address 40000
 
@@ -168,7 +171,7 @@ PortErr C=0	A
 	CONFIG			Configure slot 1 to C0000
 
 	GOSBVL	=AllowIntr
-	GOVLNG	=GETPTRLOOP
+	GOVLNG	=Warmstart
   ENDCODE
  ;
 ;
