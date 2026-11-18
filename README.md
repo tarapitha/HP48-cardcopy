@@ -1,6 +1,7 @@
 # HP48-cardcopy
 HP48GX Memory Card Image Copy Utility. Allows direct cloning of card data between memory card slot 1 and slot 2.  
 Copying the 128kB takes less than one second, 0.8s on my HP48GX.  
+The calculator will go to warmstart after the successful copy operation.  
 
 # Usage
 The utility copies data only between port 1 and the port with the higher number.  
@@ -24,4 +25,4 @@ will copy the whole memory bank from port 1 to port 7.
 - Only HP48GX is supported
 - The utility should be run from the System RAM area.  
 - All sizes of memory cards are supported, but having 32kB card in one port mandates 32kB card in another port or the copy will not be done.
-- The utility only handles copying, not resolving the possible system conflicts due to having the same libraries on multiple cards or overwriting the card with attatched libraries.
+- The utility only handles copying, not resolving the possible system conflicts due to having the same libraries on multiple cards.
